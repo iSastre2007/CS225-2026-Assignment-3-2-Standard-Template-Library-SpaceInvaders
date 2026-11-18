@@ -12,6 +12,10 @@ int mode = 0;
 inputEventManager* iEventManager = nullptr;
 collisionEventManager* cEventManager = nullptr;
 
+//Distrubution of aliens
+const float aliensInRow = 9;
+const int numOfRows = 5;
+
 Player* player = nullptr;
 std::vector<Alien*> aliens;
 
@@ -23,11 +27,28 @@ void Level_1_Load()
 
 void Level_1_Init()
 {
-    //Create the gameobjects + suscribe event handlers
+    //CREATE PLAYER AND ALIENS
+    player = new Player(0, -250, 4);
+    //Get window width and create all the aliens with their corresponding position in x (They will assign their position in y)
+    float halfWindowWidth = AEGetSysWindowWidth() / 3.0f; //Is divided by more than 2 to have an offset
+    for (int i = 0; i < numOfRows; i++)
+    {
+        for (int j = 0; j <= aliensInRow; j++)
+        {
+            float posX = -halfWindowWidth + (halfWindowWidth * 2 / aliensInRow) * j;
+            aliens.push_back(new Alien(i, posX));
+        }
+    }
+
+    //CREATE EVENT MANAGERS
     iEventManager = new inputEventManager;
-    player = new Player(0, 0);
-    aliens.push_back(new Alien(300, 200));
-    aliens.push_back(new Alien(300, 100));
+    cEventManager = new collisionEventManager(player, aliens);
+    
+    //REGISTER HANDLERS
+    iEventManager->registerEventHandler(player->getInputHandler());
+    //Register all the aliens collisions handlers
+    std::for_each(aliens.begin(), aliens.end(), [](Alien* a)->void {cEventManager->registerEventHandler(a->getCollisionHandler()); });
+    
 }
 
 void Level_1_Update()
@@ -36,7 +57,13 @@ void Level_1_Update()
     KeyboardInput();
     bool guiActive = ShowFrameworkMenu();
 
+    //Update event managers
+    iEventManager->update();
+    cEventManager->update();
 
+    //Update player & aliens
+    player->Update();
+    std::for_each(aliens.begin(), aliens.end(), [](Alien* a)->void { a->Update(); });
 }
 
 void Level_1_Render()

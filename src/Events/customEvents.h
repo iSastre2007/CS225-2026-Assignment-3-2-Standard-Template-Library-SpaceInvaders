@@ -5,12 +5,14 @@ enum Input
 {
     MoveLeft,
     MoveRight,
-    Still
+    Still,
+    Shoot
 };
 
 enum colType
 {
-    AlienPlayer
+    AlienPlayer,
+    AlienWall
 };
 
 class inputEvent : public Event

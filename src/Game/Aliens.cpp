@@ -2,23 +2,22 @@
 #include "src/Components/position_component.hh"
 #include <AEEngine.h>
 
-Alien::Alien(float posX, float posY) : inputHandler(this, &Alien::onInput), mx(posX), my(posY)
+Alien::Alien(int row, float posX) : collisionHandler(this, &Alien::onWallHit)
 {
-	attach(new PositionComponent(posX, posY));
+	mRow = row;
+	mx = posX;
+	my = 250 - verticalDisplacement * row;
+	attach(new PositionComponent((int)mx, (int)my));
 }
 
 void Alien::Update()
 {
+	if (!mAlive)
+		return;
 	//Get delta time and move
-	float dt = AEGetFrameTime();
-	my += mDirection * speed * dt;
+	float dt = (float)AEGetFrameTime();
+	mx += mDirection * speed * dt;
 
-	//Clamp position to not get out of screen
-	float limit = AEGetSysWindowHeight() / 2.0f - height / 2.0f;
-	if (my > limit)
-		my = limit;
-	else if (my < -limit)
-		my = -limit;
 
 	//Update our component
 	updatePositionComponent();
@@ -26,22 +25,9 @@ void Alien::Update()
 
 void Alien::Draw()
 {
-	AEGfxRect(mx, my, 0, width, height, AEGfxColor(255, 255, 255));
-}
-
-void Alien::onInput(inputEvent* e)
-{
-	if (e->mInput == MoveRight)
-		mDirection = 1;
-	else if (e->mInput == MoveLeft)
-		mDirection = -1;
-	else if (e->mInput == Still)
-		mDirection = 0;
-}
-
-IEventHandler* Alien::getInputHandler()
-{
-	return &inputHandler;
+	if (!mAlive)
+		return;
+	AEGfxRect(mx, my, 0, width, height, AEGfxColor(255 * mRow/ 5, 255 - (255 * mRow / 5), 255 * mRow / 5));
 }
 
 float Alien::getX()
@@ -64,15 +50,33 @@ float Alien::getHeight()
 	return height;
 }
 
+void Alien::setAlive(bool a)
+{
+	mAlive = a;
+}
+
+bool Alien::getAlive()
+{
+	return mAlive;
+}
+
+void Alien::onWallHit(collisionEvent* e)
+{
+	if (e->collisionType == AlienWall)
+	{
+		mDirection *= -1;
+		my -= verticalDisplacement / 5.0f; // Divided by 5 so they dont take a big step downwards
+	}
+}
+
+IEventHandler* Alien::getCollisionHandler()
+{
+	return &collisionHandler;
+}
+
 void Alien::updatePositionComponent()
 {
 	PositionComponent* pc = static_cast<PositionComponent*>(getComponent("Position"));
 	if (pc)
-		pc->setPosition(mx, my);
-}
-
-void Alien::changeDir()
-{
-	mDirection *= -1;
-	my -= verticalDisplacement;
+		pc->setPosition((int)mx, (int)my);
 }

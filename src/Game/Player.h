@@ -1,4 +1,5 @@
 #pragma once
+#include "Bullet.h"
 #include <src/Framework/entity.hh>
 #include "src/Events/customEvents.h"
 #include <src/Framework/event_handlers.hh>
@@ -11,7 +12,7 @@ public:
 	float height = 20.0f;
 	float speed = 400.0f;
 
-	Player(float posX, float posY);
+	Player(float posX, float posY, int maxBullets);
 
 	void Update() override;
 	void Draw() override;
@@ -19,6 +20,7 @@ public:
 	//Recive the inputs
 	void onInput(inputEvent* e);
 	IEventHandler* getInputHandler();
+	std::vector<Bullet*>& getBullets();
 
 	//Gettors
 	float getX();
@@ -33,7 +35,11 @@ private:
 	//Event handler where all inputs will be passed to
 	EventHandler<Player, inputEvent> inputHandler;
 
+	//Vector of all player bullets
+	std::vector<Bullet*> bullets;
+	void ShootBullet();
+
 	//position in world
 	float mx, my;
-	float mDirection = 0; //Direction where to go (up +1, down -1)
+	float mDirection = 0; //Direction where to go (right +1, left -1)
 };

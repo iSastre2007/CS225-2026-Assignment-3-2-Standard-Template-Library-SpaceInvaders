@@ -7,6 +7,7 @@ void inputEventManager::update()
 	//Check keyboard
 	bool left = AEInputKeyPressed('A');
 	bool right = AEInputKeyPressed('D');
+	bool shoot = AEInputKeyPressed(' ');
 
 	//Get inputs
 	Input input = Still;
@@ -14,6 +15,8 @@ void inputEventManager::update()
 		input = MoveLeft;
 	else if (right)
 		input = MoveRight;
+	else if (shoot)
+		input = Shoot;
 
 	//Create and trhow the event	
 	inputEvent e(input);

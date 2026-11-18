@@ -7,19 +7,16 @@
 class Alien : public Entity
 {
 public:
-	float width = 40.0f;
+	float width = 30.0f;
 	float height = 25.0f;
-	float speed = 400.0f;
-	const float verticalDisplacement = 35.0f;
+	float speed = 100.0f;
+	const float incrementSpeed = 5.0f;
+	const float verticalDisplacement = 30.0f;
 
-	Alien(float posX, float posY);
+	Alien(int row, float posX);
 
 	void Update() override;
 	void Draw() override;
-
-	//Recive the inputs
-	void onInput(inputEvent* e);
-	IEventHandler* getInputHandler();
 
 	//Gettors
 	float getX();
@@ -27,15 +24,24 @@ public:
 	float getWidth();
 	float getHeight();
 
+	//Kills the alien
+	void setAlive(bool a);
+	bool getAlive();
+
+	//Event to descend
+	void onWallHit(collisionEvent* e);
+	IEventHandler* getCollisionHandler();
+
 	//Update position component
 	void updatePositionComponent();
-	void changeDir(); //Called when an alien must change direction
 
 private:
-	//Event handler where all inputs will be passed to
-	EventHandler<Alien, inputEvent> inputHandler;
+	//Event handler where all collisions will be passed to
+	EventHandler<Alien, collisionEvent> collisionHandler;
 
 	//position in world
+	bool mAlive = true;
+	int mRow;
 	float mx, my;
-	float mDirection = 0; //Direction where to go (up +1, down -1)
+	float mDirection = 1; //Direction where to go (right +1, left -1)
 };

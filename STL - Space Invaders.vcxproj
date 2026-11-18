@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="src\Components\position_component.cc" />
     <ClCompile Include="src\Components\render_component.cc" />
     <ClCompile Include="src\Events\CollisionManager.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
     <ClInclude Include="src\Events\CollisionManager.h" />
     <ClInclude Include="src\Events\customEvents.h" />
     <ClInclude Include="src\Events\InputManager.h" />

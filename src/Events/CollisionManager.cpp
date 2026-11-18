@@ -10,7 +10,7 @@ collisionEventManager::collisionEventManager(Player* player, std::vector<Alien*>
 void collisionEventManager::update()
 {
 	//Data to work with
-	float halfWindowWidth = AEGetSysWindowWidth() / 2;
+	float halfWindowWidth = AEGetSysWindowWidth() / 2.0f;
 	float px = mPlayer->getX();
 	float py = mPlayer->getY();
 	float ph = mPlayer->getHeight();
@@ -27,16 +27,37 @@ void collisionEventManager::update()
 	};
 
 	//Lambda to check when aliens hit wall bounds
+	//The resolution of this collision is made here for simplicity purposes
 	auto checkBounds = [&](Alien* a) -> void {
 		if (a->getX() >= halfWindowWidth || a->getX() <= -halfWindowWidth)
-			a->changeDir();
-	};
+			isCollision(AlienWall);
+		};
+	
+	//Lambda to check when a player bullet hits an alien
+	auto checkPLayerBulletAlien = [&](Alien* a) -> void {
+		std::for_each(mPlayer->getBullets().begin(), mPlayer->getBullets().end(), [&](Bullet* b)->void { //Create another lambda to check for every
+			if (b->getAlive() == false || a->getAlive() == false) return;																							 //bullet inside the player bullets vector
+			AEVec2 bulletPos(b->getX(), b->getY());														 
+			AEVec2 alienPos(a->getX(), a->getY());
+			if (AEStaticRectToStaticRect(&bulletPos, b->getWidth(), b->getHeight(), &alienPos, a->getWidth(), a->getHeight()))
+			{
+				a->setAlive(false);
+				b->setAlive(false);
+			}
+			});
+		};
 
-	//Check collision with player and aliens
+	//PLAYER - ALIENS
 	std::for_each(mAliens.begin(), mAliens.end(), checkAndResolveCol);
 
-	//Check collision aliens with limits
+	//ALIENS - WALL
 	std::for_each(mAliens.begin(), mAliens.end(), checkBounds);
+
+	//ALIENS - PLAYER BULLET
+	std::for_each(mAliens.begin(), mAliens.end(), checkPLayerBulletAlien);
+
+	//ALIENS BULLET - PLAYER
+	//std::for_each(mAliens.begin(), mAliens.end(), checkBounds);
 }
 
 void collisionEventManager::isCollision(colType ct)
