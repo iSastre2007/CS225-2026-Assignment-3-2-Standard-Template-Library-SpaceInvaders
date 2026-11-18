@@ -13,6 +13,9 @@
     <Filter Include="Game">
       <UniqueIdentifier>{6f1c2a4e-9b3d-4e57-8a21-3c5d7e9f0b12}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{011468ea-39d1-44fb-a3f5-bf55a5aefb32}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Main.cpp" />
@@ -30,6 +33,21 @@
     </ClCompile>
     <ClCompile Include="src\Components\render_component.cc">
       <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Player.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framework\event_handlers.cc">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Events\CollisionManager.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Events\InputManager.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Aliens.cpp">
+      <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +68,24 @@
     </ClInclude>
     <ClInclude Include="src\Framework\event.hh">
       <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Player.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framework\event_handlers.hh">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\CollisionManager.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\customEvents.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Events\InputManager.h">
+      <Filter>Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Aliens.h">
+      <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
