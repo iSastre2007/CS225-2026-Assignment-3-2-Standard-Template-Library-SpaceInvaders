@@ -91,6 +91,7 @@ void Bullet::placeBullet(float posX, float posY, int dir)
 	mx = posX;
 	my = posY;
 	mDirection = dir;
+	timer = 0.0f;
 	mReady = false;
 	mAlive = true;
 }

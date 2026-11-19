@@ -13,6 +13,7 @@ public:
 	float speed = 400.0f;
 
 	Player(float posX, float posY, int maxBullets);
+	~Player();
 
 	void Update() override;
 	void Draw() override;
@@ -22,11 +23,16 @@ public:
 	IEventHandler* getInputHandler();
 	std::vector<Bullet*>& getBullets();
 
+	//Check collisions
+	void onCollision(collisionEvent* e);
+	IEventHandler* getCollisionHandler();
+
 	//Gettors
 	float getX();
 	float getY();
 	float getWidth();
 	float getHeight();
+	int getLives();
 
 	//Update position component
 	void updatePositionComponent();
@@ -34,6 +40,8 @@ public:
 private:
 	//Event handler where all inputs will be passed to
 	EventHandler<Player, inputEvent> inputHandler;
+	//Event handler where all collisions will be passed to
+	EventHandler<Player, collisionEvent> collisionHandler;
 
 	//Vector of all player bullets
 	std::vector<Bullet*> bullets;
@@ -42,4 +50,5 @@ private:
 	//position in world
 	float mx, my;
 	float mDirection = 0; //Direction where to go (right +1, left -1)
+	int mLives = 3;
 };

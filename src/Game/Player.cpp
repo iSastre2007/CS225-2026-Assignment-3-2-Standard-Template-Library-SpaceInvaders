@@ -2,12 +2,20 @@
 #include "src/Components/position_component.hh"
 #include <AEEngine.h>
 
-Player::Player(float posX, float posY, int maxBullets) : inputHandler(this, &Player::onInput), mx(posX), my(posY)
+Player::Player(float posX, float posY, int maxBullets) : inputHandler(this, &Player::onInput), collisionHandler(this, &Player::onCollision), mx(posX), my(posY)
 {
 	attach(new PositionComponent((int)posX, (int)posY));
 
 	for (int i = 0; i < maxBullets; i++)
 		bullets.push_back(new Bullet());
+
+	mLives = 3; //Hardcode just 3 lives
+}
+
+Player::~Player()
+{
+	std::for_each(bullets.begin(), bullets.end(), [](Bullet* b)->void {delete b; });
+	bullets.clear();
 }
 
 void Player::Update()
@@ -60,6 +68,24 @@ std::vector<Bullet*>& Player::getBullets()
 	return bullets;
 }
 
+void Player::onCollision(collisionEvent* e)
+{
+	if (e->collisionType == BulletPLayer)
+	{
+		mLives--;
+		mx = 0;
+	}
+	if (mLives == 0)
+	{
+		AESetGameStateNext(AE_GS_RESTART);
+	}
+}
+
+IEventHandler* Player::getCollisionHandler()
+{
+	return &collisionHandler;
+}
+
 float Player::getX()
 {
 	return mx;
@@ -78,6 +104,11 @@ float Player::getWidth()
 float Player::getHeight()
 {
 	return height;
+}
+
+int Player::getLives()
+{
+	return mLives;
 }
 
 void Player::updatePositionComponent()

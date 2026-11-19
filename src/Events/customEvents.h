@@ -12,7 +12,8 @@ enum Input
 enum colType
 {
     AlienPlayer,
-    AlienWall
+    AlienWall,
+    BulletPLayer
 };
 
 class inputEvent : public Event

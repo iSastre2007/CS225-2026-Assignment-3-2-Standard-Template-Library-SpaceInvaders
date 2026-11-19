@@ -5,11 +5,12 @@
 //Forward declaration
 class Player;
 class Alien;
+class Bullet;
 
 class collisionEventManager : public EventManager
 {
 public:
-	collisionEventManager(Player* player, std::vector<Alien*> aliens);
+	collisionEventManager(Player* player, std::vector<Alien*> aliens, Bullet* b);
 
 	//Check for collisions
 	void update() override;
@@ -17,6 +18,7 @@ public:
 private:
 	Player* mPlayer;
 	std::vector<Alien*> mAliens;
+	Bullet* mAlienBullet;
 
 	void isCollision(colType ct);
 };

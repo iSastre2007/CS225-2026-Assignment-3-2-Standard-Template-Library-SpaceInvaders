@@ -3,7 +3,7 @@
 #include "src/Game/Player.h"
 #include "src/Game/Aliens.h"
 
-collisionEventManager::collisionEventManager(Player* player, std::vector<Alien*> aliens) : mPlayer(player), mAliens(aliens)
+collisionEventManager::collisionEventManager(Player* player, std::vector<Alien*> aliens, Bullet* b) : mPlayer(player), mAliens(aliens), mAlienBullet(b)
 {
 }
 
@@ -11,11 +11,20 @@ void collisionEventManager::update()
 {
 	//Data to work with
 	float halfWindowWidth = AEGetSysWindowWidth() / 2.0f;
+
+	//Player
 	float px = mPlayer->getX();
 	float py = mPlayer->getY();
 	float ph = mPlayer->getHeight();
 	float pw = mPlayer->getWidth();
 	AEVec2 playerPos(px, py);
+
+	//Alien
+	float abx = mAlienBullet->getX();
+	float aby = mAlienBullet->getY();
+	float abh = mAlienBullet->getHeight();
+	float abw = mAlienBullet->getWidth();
+	AEVec2 aBulletPos(abx, aby);
 
 	//Lambda to check collision between an alien and the player
 	auto checkAndResolveCol = [&](Alien* a) -> void {
@@ -36,7 +45,7 @@ void collisionEventManager::update()
 	//Lambda to check when a player bullet hits an alien
 	auto checkPLayerBulletAlien = [&](Alien* a) -> void {
 		std::for_each(mPlayer->getBullets().begin(), mPlayer->getBullets().end(), [&](Bullet* b)->void { //Create another lambda to check for every
-			if (b->getAlive() == false || a->getAlive() == false) return;																							 //bullet inside the player bullets vector
+			if (b->getAlive() == false || a->getAlive() == false) return;								 //bullet inside the player bullets vector
 			AEVec2 bulletPos(b->getX(), b->getY());														 
 			AEVec2 alienPos(a->getX(), a->getY());
 			if (AEStaticRectToStaticRect(&bulletPos, b->getWidth(), b->getHeight(), &alienPos, a->getWidth(), a->getHeight()))
@@ -57,7 +66,10 @@ void collisionEventManager::update()
 	std::for_each(mAliens.begin(), mAliens.end(), checkPLayerBulletAlien);
 
 	//ALIENS BULLET - PLAYER
-	//std::for_each(mAliens.begin(), mAliens.end(), checkBounds);
+	if (AEStaticRectToStaticRect(&playerPos, pw, ph, &aBulletPos, abw, abh))
+	{
+		isCollision(BulletPLayer);
+	}
 }
 
 void collisionEventManager::isCollision(colType ct)
