@@ -52,6 +52,7 @@ void collisionEventManager::update()
 			{
 				a->setAlive(false);
 				b->setAlive(false);
+				isCollision(AlienBullet);
 			}
 			});
 		};
@@ -69,6 +70,12 @@ void collisionEventManager::update()
 	if (AEStaticRectToStaticRect(&playerPos, pw, ph, &aBulletPos, abw, abh))
 	{
 		isCollision(BulletPLayer);
+	}
+
+	//BULLET - BLOCKS
+	if (AEStaticRectToStaticRect(&playerPos, pw, ph, &aBulletPos, abw, abh))
+	{
+		isCollision(BulletBlock);
 	}
 }
 

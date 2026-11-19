@@ -49,10 +49,10 @@
     <ClCompile Include="src\Game\Aliens.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
+    <ClCompile Include="src\Game\DestroiableBlock.cpp">
       <Filter>Game</Filter>
     </ClCompile>
-    <ClCompile Include="DestroiableBlock.cpp">
+    <ClCompile Include="src\Game\Bullet.cpp">
       <Filter>Game</Filter>
     </ClCompile>
   </ItemGroup>
@@ -93,10 +93,10 @@
     <ClInclude Include="src\Game\Aliens.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
+    <ClInclude Include="src\Game\Bullet.h">
       <Filter>Game</Filter>
     </ClInclude>
-    <ClInclude Include="DestroiableBlock.h">
+    <ClInclude Include="src\Game\DestroiableBlock.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>

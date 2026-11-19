@@ -5,6 +5,7 @@
 #include "src/Game/Aliens.h"
 #include "src/Framework/event_handlers.hh"
 #include "src/Events/customEvents.h"
+#include "src/Game/DestroiableBlock.h"
 #include "src/Events/InputManager.h"
 #include "src/Events/CollisionManager.h"
 
@@ -19,6 +20,8 @@ const int numOfRows = 5;
 //Entities
 Player* player = nullptr;
 std::vector<Alien*> aliens;
+#define NUMBER_OF_BLOCKS 5
+std::vector<DestroiableBlock*> blocks; 
 Bullet* alienBullet; //Bullet used by the aliens
 
 //Timer for aliens shooting
@@ -59,7 +62,7 @@ void Level_1_Init()
     //CREATE PLAYER AND ALIENS
     player = new Player(0, -250, 3);
     //Get window width and create all the aliens with their corresponding position in x (They will assign their position in y)
-    float halfWindowWidth = AEGetSysWindowWidth() / 3.0f; //Is divided by more than 2 to have an offset
+    float halfWindowWidth = (float)AEGetSysWindowWidth() / 3.0f; //Is divided by more than 2 to have an offset
     for (int i = 0; i < numOfRows; i++)
     {
         for (int j = 0; j <= aliensInRow; j++)
@@ -67,6 +70,10 @@ void Level_1_Init()
             float posX = -halfWindowWidth + (halfWindowWidth * 2 / aliensInRow) * j;
             aliens.push_back(new Alien(i, posX));
         }
+    }
+    for (int i = 0; i < NUMBER_OF_BLOCKS; i++)
+    {
+        blocks.push_back(new DestroiableBlock(-halfWindowWidth + 2 * BLOCK_WIDTH * i + 25, -150));
     }
     alienBullet = new Bullet; //Bullet used by the aliens
 
@@ -107,6 +114,7 @@ void Level_1_Render()
 
     player->Draw();
     std::for_each(aliens.begin(), aliens.end(), [](Alien* a) -> void {a->Draw(); }); //Draw each alien
+    std::for_each(blocks.begin(), blocks.end(), [](DestroiableBlock* b) -> void {b->Draw(); }); //Draw each block
     alienBullet->Draw();
 
     //Texts
@@ -126,6 +134,9 @@ void Level_1_Free()
 
     std::for_each(aliens.begin(), aliens.end(), [](Alien* a)->void {delete a; });
     aliens.clear();
+
+    std::for_each(blocks.begin(), blocks.end(), [](DestroiableBlock* b)->void {delete b; });
+    blocks.clear();
 
     delete alienBullet;
     alienBullet = nullptr;

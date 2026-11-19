@@ -35,5 +35,5 @@ private:
 	bool mAlive = false; //Lets know when it is flying
 	bool mReady = true; //Lets know when it can be shot
 	float mx, my;
-	float mDirection = 0; //Direction where to go (up +1, down -1)
+	int mDirection = 0; //Direction where to go (up +1, down -1)
 };

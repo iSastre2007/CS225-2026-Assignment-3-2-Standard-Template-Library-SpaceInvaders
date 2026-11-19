@@ -72,6 +72,8 @@ void Alien::onWallHit(collisionEvent* e)
 		mDirection *= -1;
 		my -= verticalDisplacement / 5.0f; // Divided by 5 so they dont take a big step downwards
 	}
+	if (e->collisionType == AlienBullet)
+		speed += incrementSpeed;
 }
 
 IEventHandler* Alien::getCollisionHandler()

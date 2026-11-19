@@ -2,18 +2,14 @@
 #include "src/Components/position_component.hh"
 #include <AEEngine.h>
 
-DestroiableBlock::DestroiableBlock()
+DestroiableBlock::DestroiableBlock(float posX, float posY) : collisionHandler(this, &DestroiableBlock::OnCollision)
 {
-	mx = 0;
-	my = 0;
-	attach(new PositionComponent((int)mx, (int)my));
+	mx = posX;
+	my = posY;
 }
 
 void DestroiableBlock::Update()
 {
-
-	//Update our component
-	updatePositionComponent();
 }
 
 void DestroiableBlock::Draw()
@@ -42,9 +38,11 @@ float DestroiableBlock::getHeight()
 	return height;
 }
 
-void DestroiableBlock::updatePositionComponent()
+void DestroiableBlock::OnCollision(collisionEvent* e)
 {
-	PositionComponent* pc = static_cast<PositionComponent*>(getComponent("Position"));
-	if (pc)
-		pc->setPosition((int)mx, (int)my);
+	if (e->collisionType == BulletBlock)
+	{
+		if (height > 0)
+			height -= initialHeight / 5;
+	}
 }

@@ -19,8 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
-    <ClCompile Include="DestroiableBlock.cpp" />
     <ClCompile Include="src\Components\position_component.cc" />
     <ClCompile Include="src\Components\render_component.cc" />
     <ClCompile Include="src\Events\CollisionManager.cpp" />
@@ -29,13 +27,13 @@
     <ClCompile Include="src\Framework\entity.cc" />
     <ClCompile Include="src\Framework\event_handlers.cc" />
     <ClCompile Include="src\Game\Aliens.cpp" />
+    <ClCompile Include="src\Game\Bullet.cpp" />
+    <ClCompile Include="src\Game\DestroiableBlock.cpp" />
     <ClCompile Include="src\Game\Player.cpp" />
     <ClCompile Include="src\Levels\Level 1.cpp" />
     <ClCompile Include="src\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Bullet.h" />
-    <ClInclude Include="DestroiableBlock.h" />
     <ClInclude Include="src\Events\CollisionManager.h" />
     <ClInclude Include="src\Events\customEvents.h" />
     <ClInclude Include="src\Events\InputManager.h" />
@@ -46,6 +44,8 @@
     <ClInclude Include="src\Framework\entity.hh" />
     <ClInclude Include="src\Framework\event_handlers.hh" />
     <ClInclude Include="src\Game\Aliens.h" />
+    <ClInclude Include="src\Game\Bullet.h" />
+    <ClInclude Include="src\Game\DestroiableBlock.h" />
     <ClInclude Include="src\Game\Player.h" />
     <ClInclude Include="src\Levels\Level 1.h" />
   </ItemGroup>
