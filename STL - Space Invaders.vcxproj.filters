@@ -52,6 +52,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>Game</Filter>
     </ClCompile>
+    <ClCompile Include="DestroiableBlock.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Levels\Level 1.h">
@@ -91,6 +94,9 @@
       <Filter>Game</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="DestroiableBlock.h">
       <Filter>Game</Filter>
     </ClInclude>
   </ItemGroup>
