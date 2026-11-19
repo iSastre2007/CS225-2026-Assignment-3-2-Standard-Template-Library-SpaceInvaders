@@ -3,7 +3,8 @@
 #include "src/Game/Player.h"
 #include "src/Game/Aliens.h"
 
-collisionEventManager::collisionEventManager(Player* player, std::vector<Alien*> aliens, Bullet* b) : mPlayer(player), mAliens(aliens), mAlienBullet(b)
+collisionEventManager::collisionEventManager(Player* player, std::vector<Alien*> aliens, Bullet* b, std::vector<DestroiableBlock*> blocks) : 
+	mPlayer(player), mAliens(aliens), mAlienBullet(b), mBlocks(blocks)
 {
 }
 
@@ -37,16 +38,19 @@ void collisionEventManager::update()
 
 	//Lambda to check when aliens hit wall bounds
 	//The resolution of this collision is made here for simplicity purposes
-	auto checkBounds = [&](Alien* a) -> void {
+	auto checkBounds = [&](Alien* a) -> bool {
+		if (a->getAlive() == false) //Not check if its dead
+			return false;
 		if (a->getX() >= halfWindowWidth || a->getX() <= -halfWindowWidth)
-			isCollision(AlienWall);
+			return true;
+		return false;
 		};
-	
+
 	//Lambda to check when a player bullet hits an alien
 	auto checkPLayerBulletAlien = [&](Alien* a) -> void {
 		std::for_each(mPlayer->getBullets().begin(), mPlayer->getBullets().end(), [&](Bullet* b)->void { //Create another lambda to check for every
 			if (b->getAlive() == false || a->getAlive() == false) return;								 //bullet inside the player bullets vector
-			AEVec2 bulletPos(b->getX(), b->getY());														 
+			AEVec2 bulletPos(b->getX(), b->getY());
 			AEVec2 alienPos(a->getX(), a->getY());
 			if (AEStaticRectToStaticRect(&bulletPos, b->getWidth(), b->getHeight(), &alienPos, a->getWidth(), a->getHeight()))
 			{
@@ -61,7 +65,8 @@ void collisionEventManager::update()
 	std::for_each(mAliens.begin(), mAliens.end(), checkAndResolveCol);
 
 	//ALIENS - WALL
-	std::for_each(mAliens.begin(), mAliens.end(), checkBounds);
+	if (std::any_of(mAliens.begin(), mAliens.end(), checkBounds))
+		isCollision(AlienWall);
 
 	//ALIENS - PLAYER BULLET
 	std::for_each(mAliens.begin(), mAliens.end(), checkPLayerBulletAlien);
@@ -70,12 +75,6 @@ void collisionEventManager::update()
 	if (AEStaticRectToStaticRect(&playerPos, pw, ph, &aBulletPos, abw, abh))
 	{
 		isCollision(BulletPLayer);
-	}
-
-	//BULLET - BLOCKS
-	if (AEStaticRectToStaticRect(&playerPos, pw, ph, &aBulletPos, abw, abh))
-	{
-		isCollision(BulletBlock);
 	}
 }
 

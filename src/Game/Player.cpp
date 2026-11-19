@@ -79,6 +79,8 @@ void Player::onCollision(collisionEvent* e)
 	{
 		AESetGameStateNext(AE_GS_RESTART);
 	}
+	if(e->collisionType == AlienPlayer)
+		AESetGameStateNext(AE_GS_RESTART);
 }
 
 IEventHandler* Player::getCollisionHandler()

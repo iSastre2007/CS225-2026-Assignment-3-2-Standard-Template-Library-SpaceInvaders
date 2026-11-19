@@ -60,6 +60,11 @@ bool Alien::getAlive()
 	return mAlive;
 }
 
+void Alien::Restart()
+{
+	mAlive = true;
+}
+
 void Alien::Shoot(Bullet* b)
 {
 	b->placeBullet(mx, my, -1); //-1 because this is an alien and we want bullet to go to player

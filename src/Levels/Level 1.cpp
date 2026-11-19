@@ -5,7 +5,6 @@
 #include "src/Game/Aliens.h"
 #include "src/Framework/event_handlers.hh"
 #include "src/Events/customEvents.h"
-#include "src/Game/DestroiableBlock.h"
 #include "src/Events/InputManager.h"
 #include "src/Events/CollisionManager.h"
 
@@ -26,21 +25,26 @@ Bullet* alienBullet; //Bullet used by the aliens
 
 //Timer for aliens shooting
 float timer = 0.0f;
-const float aShootCooldown = 2.5f;
+const float aShootCooldown = 1.5f;
 
 bool ShowFrameworkMenu();
 
+void restartAliens()
+{
+    std::for_each(aliens.begin(), aliens.end(), [](Alien* a)->void {a->Restart(); })
+}
+
 void randomAlienShoot()
 {
+    //Restart if there is no one
+    if (std::none_of(aliens.begin(), aliens.end(), [](Alien* a)->bool {return a->getAlive(); }))
+        AESetGameStateNext(AE_GS_RESTART);
+
     //number of the picked alien
     int n = (int)AERandFloat(0, aliens.size());
     while (!aliens[n]->getAlive())
-    {
-        if (n < aliens.size())
-            n++;
-        else
-            n = 0;
-    }
+        n = (n + 1) % aliens.size();
+
     aliens[n]->Shoot(alienBullet);
 }
 void AlienShootTimer()
@@ -71,22 +75,17 @@ void Level_1_Init()
             aliens.push_back(new Alien(i, posX));
         }
     }
-    for (int i = 0; i < NUMBER_OF_BLOCKS; i++)
-    {
-        blocks.push_back(new DestroiableBlock(-halfWindowWidth + 2 * BLOCK_WIDTH * i + 25, -150));
-    }
     alienBullet = new Bullet; //Bullet used by the aliens
 
     //CREATE EVENT MANAGERS
     iEventManager = new inputEventManager;
-    cEventManager = new collisionEventManager(player, aliens, alienBullet);
+    cEventManager = new collisionEventManager(player, aliens, alienBullet, blocks);
     
     //REGISTER HANDLERS
     iEventManager->registerEventHandler(player->getInputHandler());
     //Register all the aliens & player collisions handlers
     std::for_each(aliens.begin(), aliens.end(), [](Alien* a)->void {cEventManager->registerEventHandler(a->getCollisionHandler()); });
     cEventManager->registerEventHandler(player->getCollisionHandler());
-    
 }
 
 void Level_1_Update()
@@ -114,7 +113,6 @@ void Level_1_Render()
 
     player->Draw();
     std::for_each(aliens.begin(), aliens.end(), [](Alien* a) -> void {a->Draw(); }); //Draw each alien
-    std::for_each(blocks.begin(), blocks.end(), [](DestroiableBlock* b) -> void {b->Draw(); }); //Draw each block
     alienBullet->Draw();
 
     //Texts
@@ -140,6 +138,9 @@ void Level_1_Free()
 
     delete alienBullet;
     alienBullet = nullptr;
+
+    delete iEventManager;
+    delete cEventManager;
 }
 
 void Level_1_Unload()

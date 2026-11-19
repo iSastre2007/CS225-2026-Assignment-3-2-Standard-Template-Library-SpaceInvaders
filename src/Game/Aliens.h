@@ -28,6 +28,7 @@ public:
 	//Set the modes of the alien (alive = false means death)
 	void setAlive(bool a);
 	bool getAlive();
+	void Restart();
 
 	//Shooting function
 	void Shoot(Bullet* b);
